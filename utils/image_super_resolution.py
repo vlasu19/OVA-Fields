@@ -3,7 +3,25 @@ import torch
 from BSRGAN.utils import utils_image as util
 from BSRGAN.models.network_rrdbnet import RRDBNet as net
 import numpy as np
+import requests
 from PIL import Image
+
+MODEL_URL = "https://drive.google.com/file/d/1WNULM1e8gRNvsngVscsQ8tpaOqJ4mYtv/view?usp=drive_link"
+
+MODEL_PATH = "../checkpoints/BSRGAN.pth"  # set model path
+
+# Check if the model file exists locally; if not, download it
+if not MODEL_PATH.exists():
+    print(f"Model file not found at {MODEL_PATH}. Downloading from {MODEL_URL}...")
+    response = requests.get(MODEL_URL, stream=True)
+    
+    if response.status_code == 200:
+        with open(MODEL_PATH, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Model downloaded and saved to {MODEL_PATH}.")
+    else:
+        print(f"Failed to download model from {MODEL_URL}. HTTP Status Code: {response.status_code}")
 
 # convert uint to 4-dimensional torch tensor
 def uint2tensor4(img):
@@ -13,7 +31,7 @@ def super_resolution(img, sf=4):
     sf = 4
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    model_path = './checkpoints/BSRGAN.pth'          # set model path
+    model_path = MODEL_PATH        # set model path
     torch.cuda.empty_cache()
 
     model = net(in_nc=3, out_nc=3, nf=64, nb=23, gc=32, sf=sf)  # define network

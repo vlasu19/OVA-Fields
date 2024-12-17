@@ -6,12 +6,30 @@ from tqdm import tqdm
 import cv2
 import torch
 import numpy as np
+import requests
 from pathlib import Path
 
 # Set LOCATE_PATH to locate the model directory, and add it to sys.path
 LOCATE_PATH = os.environ.get("LOCATE_PATH", Path(__file__).parent / "../LOCATE")
 sys.path.insert(0, f"{LOCATE_PATH}/")
-MODEL_PATH = os.environ.get("MODEL_PATH", Path(__file__).parent / "../LOCATE/checkpoints/best_seen.pth")
+# Set the URL for the model file
+MODEL_URL = "https://drive.google.com/file/d/1XYITtc2QX9_oVH-yFOLtLHX1QFpFOMif/view?usp=drive_link"
+
+MODEL_PATH = os.environ.get("MODEL_PATH", Path(__file__).parent / "../checkpoints/best_seen.pth")
+
+# Check if the model file exists locally; if not, download it
+if not MODEL_PATH.exists():
+    print(f"Model file not found at {MODEL_PATH}. Downloading from {MODEL_URL}...")
+    response = requests.get(MODEL_URL, stream=True)
+    
+    if response.status_code == 200:
+        with open(MODEL_PATH, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Model downloaded and saved to {MODEL_PATH}.")
+    else:
+        print(f"Failed to download model from {MODEL_URL}. HTTP Status Code: {response.status_code}")
+
 
 from LOCATE.models.locate import Net as locate_model
 from LOCATE.utils.util import set_seed

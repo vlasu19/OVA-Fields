@@ -23,7 +23,8 @@ from dataloaders import ClassificationExtractor
 
 # Set up the constants
 
-SAVE_DIRECTORY = "./checkpoints"
+SAVE_DIRECTORY = "YOUR_PATH_TO_SAVE_MODEL"
+DATA_DIRECTORY = "./labeled_dataset.pt"
 DEVICE = "cuda"
 IMAGE_TO_LABEL_CLIP_LOSS_SCALE = 1.0
 LABEL_TO_IMAGE_LOSS_SCALE = 1.0
@@ -44,7 +45,7 @@ SBERT_MODEL_NAME = "all-mpnet-base-v2"
 
 # Load the data and create the dataloader created in the previous tutorial notebook
 
-training_data = torch.load("./lab0920.pt")
+training_data = torch.load(DATA_DIRECTORY)
 max_coords, _ = training_data._label_xyz.max(dim=0)
 min_coords, _ = training_data._label_xyz.min(dim=0)
 
@@ -94,14 +95,15 @@ def train(
         clip_image_labels = clip_data_dict["clip_image_vector"].to(device)
         clip_affordance_labels = clip_data_dict["clip_affordance_vector"].to(device)
 
-        # 获取Affordance热力图值和置信度权重
+        # Get the affordance heatmap values and confidence weights
         affordance_heatmap_values = clip_data_dict["affordance_heatmap_values"].to(device)
         affordance_weights = clip_data_dict["affordance_weight"].to(device)
 
         image_weights = torch.exp(-exp_decay_coeff * clip_data_dict["distance"]).to(
             device
         )
-        # 将图像和语言标签转换为索引，以便计算对比损失
+
+        # Convert the image and language labels to indices for computing the contrastive loss
         image_label_index: torch.Tensor = (
             clip_data_dict["img_idx"].to(device).reshape(-1, 1)
         )
@@ -114,7 +116,7 @@ def train(
             predicted_affordance_latents,
         ) = labelling_model(xyzs, affordance_values=affordance_heatmap_values)
 
-        # 计算损失
+        # Compute the contrastive loss
         batch_size = len(image_label_index)
         image_label_mask: torch.Tensor = (
             image_label_index != image_label_index.t()
@@ -129,23 +131,23 @@ def train(
             predicted_image_latents,
             clip_image_labels,
             label_mask=image_label_mask,
-            confidence_weights=image_weights,  # 传入置信度权重
+            confidence_weights=image_weights,  # Confidence weights
         )
 
         affordance_contrastive_loss = labelling_model.compute_loss(
             predicted_latents=predicted_affordance_latents,
             actual_latents=clip_affordance_labels,
             label_mask=affordance_label_mask,
-            confidence_weights=affordance_weights,  # 传入置信度权重
+            confidence_weights=affordance_weights,  # Confidence weights
         )
 
-        # 清理无用变量
+        # clear unused variables
         del (
             image_label_mask,
             image_label_index,
         )
 
-        # 计算总损失
+        # compute the total loss
         contrastive_loss = (
             IMAGE_WEIGHT * contrastive_loss_images
             + AFFORDANCE_WEIGHT * affordance_contrastive_loss
@@ -154,7 +156,8 @@ def train(
         optim.zero_grad(set_to_none=True)
         contrastive_loss.backward()
         optim.step()
-        # 裁剪温度参数以保持稳定性
+
+        # clip the temperature parameter to maintain stability
         labelling_model.temperature.data = torch.clamp(
             labelling_model.temperature.data, max=np.log(100.0)
         )
@@ -203,7 +206,7 @@ def save(
     }
     torch.save(
         state_dict,
-        f"{save_directory}/lab0920_Affordance_Model.pt",
+        f"{save_directory}/Affordance_Model.pt",
     )
     return 0
 

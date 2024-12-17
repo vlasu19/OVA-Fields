@@ -1,9 +1,9 @@
 [submodule "BSRGAN"]
 	path = BSRGAN
 	url = https://github.com/cszn/BSRGAN.git
-[submodule "Detic"]
-	path = Detic
-	url = https://github.com/facebookresearch/Detic.git
 [submodule "LOCATE"]
 	path = LOCATE
 	url = https://github.com/Reagan1311/LOCATE.git
+[submodule "Detic"]
+	path = Detic
+	url = https://github.com/notmahi/Detic.git

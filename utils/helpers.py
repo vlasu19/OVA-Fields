@@ -2,6 +2,8 @@ import os
 import numpy as np
 import torch
 import sys
+import requests
+import gdown
 from pathlib import Path
 
 DETIC_PATH = os.environ.get("DETIC_PATH", Path(__file__).parent / "../Detic")
@@ -25,3 +27,21 @@ def set_seed(seed=42):
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed) 
+
+def download_model(url: str, model_path: Path) -> None:
+    try:
+        # Check if the model file exists locally; if not, download it
+        if not os.path.exists(model_path):
+            print(f"Model file not found at {model_path}. Downloading from {model_path}...")
+            gdown.download(url, str(model_path), quiet=False)
+            print(f"Model downloaded and saved to {model_path}.")
+        else:
+            print(f"Model already exists at {model_path}. Skipping download.")
+    
+    except gdown.exceptions.DownloadError as e:
+        # Handle errors specific to gdown download failure
+        print(f"Error downloading the model from {url}: {e}")
+    
+    except Exception as e:
+        # Handle general errors (e.g., permission, file I/O, etc.)
+        print(f"An unexpected error occurred: {e}")

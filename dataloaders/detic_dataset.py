@@ -25,10 +25,12 @@ from dataloaders.scannet_200_classes import (
 from utils.image_super_resolution import super_resolution
 from utils.visualizer import VisualizationHandler
 from utils.helpers import get_clip_embeddings
+from utils.helpers import download_model
 
 DETIC_PATH = os.environ.get("DETIC_PATH", Path(__file__).parent / "../Detic")
 sys.path.insert(0, f"{DETIC_PATH}/third_party/CenterNet2/")
 sys.path.insert(0, f"{DETIC_PATH}/")
+
 
 # Setup detectron2 logger
 from detectron2.utils.logger import setup_logger
@@ -52,6 +54,19 @@ SCANNET_ID_TO_COLOR = {
     i: np.array(c) for i, c in enumerate(SCANNET_COLOR_MAP_200.values())
 }
 SCANNET_ID_TO_NAME = {i: x for i, x in enumerate(CLASS_LABELS_200)}
+
+MODEL_FOLDER = Path(__file__).parent / "../checkpoints"
+BSRGAN_MODEL_URL = "https://drive.google.com/uc?id=1WNULM1e8gRNvsngVscsQ8tpaOqJ4mYtv"
+LOCATE_MODEL_URL = "https://drive.google.com/uc?id=1XYITtc2QX9_oVH-yFOLtLHX1QFpFOMif"
+
+# Check if the folder is exists
+if not os.path.exists(MODEL_FOLDER):
+    os.makedirs(MODEL_FOLDER, exist_ok=True)
+
+# Download the BSRGAN and LOCATE models
+download_model(LOCATE_MODEL_URL, MODEL_FOLDER / "LOCATE.pth")
+download_model(BSRGAN_MODEL_URL, MODEL_FOLDER / "BSRGAN.pth")
+
 
 class DeticDenseLabelledDataset(Dataset):
     """

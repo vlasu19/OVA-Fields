@@ -3,26 +3,10 @@ import torch
 from BSRGAN.utils import utils_image as util
 from BSRGAN.models.network_rrdbnet import RRDBNet as net
 import numpy as np
-import os
-import requests
+from pathlib import Path
 from PIL import Image
 
-MODEL_URL = "https://drive.google.com/file/d/1WNULM1e8gRNvsngVscsQ8tpaOqJ4mYtv/view?usp=drive_link"
-
-MODEL_PATH = "../checkpoints/BSRGAN.pth"  # set model path
-
-# Check if the model file exists locally; if not, download it
-if not os.path.exists(MODEL_PATH):
-    print(f"Model file not found at {MODEL_PATH}. Downloading from {MODEL_URL}...")
-    response = requests.get(MODEL_URL, stream=True)
-    
-    if response.status_code == 200:
-        with open(MODEL_PATH, "wb") as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
-        print(f"Model downloaded and saved to {MODEL_PATH}.")
-    else:
-        print(f"Failed to download model from {MODEL_URL}. HTTP Status Code: {response.status_code}")
+MODEL_PATH = Path(__file__).parent /  "../checkpoints/BSRGAN.pth"  # set model path
 
 # convert uint to 4-dimensional torch tensor
 def uint2tensor4(img):

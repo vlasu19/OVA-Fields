@@ -3,6 +3,7 @@ import torch
 from BSRGAN.utils import utils_image as util
 from BSRGAN.models.network_rrdbnet import RRDBNet as net
 import numpy as np
+import os
 import requests
 from PIL import Image
 
@@ -11,7 +12,7 @@ MODEL_URL = "https://drive.google.com/file/d/1WNULM1e8gRNvsngVscsQ8tpaOqJ4mYtv/v
 MODEL_PATH = "../checkpoints/BSRGAN.pth"  # set model path
 
 # Check if the model file exists locally; if not, download it
-if not MODEL_PATH.exists():
+if not os.path.exists(MODEL_PATH):
     print(f"Model file not found at {MODEL_PATH}. Downloading from {MODEL_URL}...")
     response = requests.get(MODEL_URL, stream=True)
     

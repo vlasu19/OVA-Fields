@@ -34,5 +34,4 @@ def super_resolution(img, sf=4):
     img_E = model(img_L)
     img_E = util.tensor2uint(img_E)
     img_E = Image.fromarray(img_E, mode="RGB")
-    # 将img_E转换为Image对象
     return img_E

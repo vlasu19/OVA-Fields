@@ -38,9 +38,10 @@ class GridCLIPModel(nn.Module):
             gridtype="hash",
             align_corners=False,
         )
-        # Affordance映射层
+        # Affordance Embedding Layer
         self.affordance_embed = nn.Linear(1, num_levels * level_dim)
-        # 现在通过MLP转换输出
+
+        # Now transform the output through an MLP
         self._post_grid = MLP(
             input_dim=num_levels * level_dim,
             hidden_dim=mlp_width,
@@ -48,16 +49,18 @@ class GridCLIPModel(nn.Module):
             output_dim=image_rep_size + affordance_rep_size,
             batchnorm=batchnorm,
         )
-        # 添加注意力机制
+
+        # Add attention mechanism
         self.attention = nn.MultiheadAttention(
             embed_dim=num_levels * level_dim,
             num_heads=8,
             batch_first=True
         )
 
-        # 用于图像损失的额外存储
+        # Use an identity layer to allow for easy swapping of the head
         self._image_head = nn.Identity()
-        # 由@imisra建议的魔法值
+
+        # A magic value adviced from @imisra
         self.temperature = nn.Parameter(torch.log(torch.tensor(1.0 / 0.07)))
 
         self._image_rep_size = image_rep_size
@@ -93,7 +96,7 @@ class GridCLIPModel(nn.Module):
                 torch.cat(torch.ones(3, device=x.device) * -bounds),
             )
 
-        # 将Affordance热力图值与坐标拼接
+        # concat the affordance heatmap values with the coordinates
         bounded_x = (x - min_bounds) / (max_bounds - min_bounds)
         grid_hash = self._grid_model(bounded_x, bound=1.0)
         # result = self._post_grid(grid_hash)
@@ -102,9 +105,7 @@ class GridCLIPModel(nn.Module):
 
         combined_features = grid_hash + affordance_embed
 
-        # 应用注意力机制
-        # 需要将grid_hash的形状调整为(batch_size, seq_len, embed_dim)
-        # 假设grid_hash的形状为(N, embed_dim)
+        # Apply attention mechanism
         attn_input = combined_features.unsqueeze(1)  # (N, 1, embed_dim)
         attn_output, attn_weights = self.attention(attn_input, attn_input, attn_input)
         attn_output = attn_output.squeeze(1)  # (N, embed_dim)
@@ -132,11 +133,10 @@ class GridCLIPModel(nn.Module):
     def compute_loss(
         self, predicted_latents, actual_latents, label_mask=None, affordance_latents=None, affordance_weight=1.0, confidence_weights=None
     ):
-        # 归一化处理
         normalized_predicted_latents = F.normalize(predicted_latents, p=2, dim=-1)
         normalized_actual_latents = F.normalize(actual_latents, p=2, dim=-1)
         
-        # 如果有affordance_latents，则归一化处理
+        # if have affordance_latents, normalize it
         if affordance_latents is not None:
             normalized_affordance_latents = F.normalize(affordance_latents, p=2, dim=-1)
 
@@ -150,18 +150,19 @@ class GridCLIPModel(nn.Module):
             * temp
         )
 
-        # 对于语义标签的对比学习，零值化标签相同的元素
+        # To prevent the model from learning the identity function
         if label_mask is not None:
             sim = sim * label_mask
             del label_mask
 
         labels = torch.arange(len(predicted_latents), device=predicted_latents.device)
 
-        # 使用置信度权重计算损失
+        # Calculate contrastive loss using sample weights
         if confidence_weights is not None:
-            # 确保confidence_weights的形状为(N,)
+            # Make sure the shape of confidence_weights is (N,)
             confidence_weights = confidence_weights.to(predicted_latents.device)
-            # 计算对比损失，使用样本权重
+
+            # Calculate contrastive loss using sample weights
             loss_fn = nn.CrossEntropyLoss(reduction='none')
             loss_i = loss_fn(sim, labels)
             loss_j = loss_fn(sim.t(), labels)
@@ -170,7 +171,7 @@ class GridCLIPModel(nn.Module):
         else:
             contrastive_loss = (F.cross_entropy(sim, labels) + F.cross_entropy(sim.t(), labels)) / 2
 
-        # 如果提供了affordance_latents，计算额外的affordance损失
+        # Calculate affordance loss if affordance_latents is provided
         if affordance_latents is not None:
             affordance_sim = (
                 torch.einsum(
@@ -181,7 +182,7 @@ class GridCLIPModel(nn.Module):
                 * temp
             )
 
-            # 使用置信度权重计算affordance损失
+            # Calculate affordance loss using sample weights
             if confidence_weights is not None:
                 loss_fn = nn.CrossEntropyLoss(reduction='none')
                 affordance_loss_i = loss_fn(affordance_sim, labels)
@@ -193,7 +194,7 @@ class GridCLIPModel(nn.Module):
         else:
             affordance_loss = 0
 
-        # 最终损失是对比损失和affordance损失的加权和
+        # The final loss is the weighted sum of the contrastive loss and affordance loss
         total_loss = contrastive_loss + affordance_weight * affordance_loss
 
         return total_loss

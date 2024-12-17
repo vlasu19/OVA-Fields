@@ -19,10 +19,9 @@ def get_clip_embeddings(vocabulary, prompt="a "):
     return emb
 
 def set_seed(seed=42):
-	# 下面两个常规设置了，用来np和random的话要设置 
     np.random.seed(seed)
     
-    os.environ['PYTHONHASHSEED'] = str(seed)  # 禁止hash随机化
+    os.environ['PYTHONHASHSEED'] = str(seed)
 
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)

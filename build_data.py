@@ -4,7 +4,7 @@ import os
 import torch
 from dataloaders import R3DSemanticDataset, DeticDenseLabelledDataset
 from dataloaders.scannet_200_classes import AFF_OBJ_LIST
-DATA_PATH = 'YOUR_PATH_TO_DATASET'
+DATA_PATH = 'data/lab_0920.r3d'
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 dataset = R3DSemanticDataset(DATA_PATH, AFF_OBJ_LIST)

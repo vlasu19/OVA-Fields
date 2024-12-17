@@ -45,7 +45,7 @@ def viz_pred_test(save_path, image, ego_pred, aff_list, aff_label, img_name, epo
 
 def overlay_mask(img: Image.Image, mask: Image.Image, colormap: str = "jet", alpha: float = 0.7) -> Image.Image:
     '''
-    将mask叠加到img上
+    Overlay a mask on an image using a colormap.
     '''
     if not isinstance(img, Image.Image) or not isinstance(mask, Image.Image):
         raise TypeError("img and mask arguments need to be PIL.Image")

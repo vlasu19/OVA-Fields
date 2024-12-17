@@ -4,7 +4,7 @@ import os
 import torch
 from dataloaders import R3DSemanticDataset, DeticDenseLabelledDataset
 from dataloaders.scannet_200_classes import AFF_OBJ_LIST
-DATA_PATH = './data/r3d/lab_0920.r3d'
+DATA_PATH = 'YOUR_PATH_TO_DATASET'
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 
 dataset = R3DSemanticDataset(DATA_PATH, AFF_OBJ_LIST)
@@ -21,4 +21,4 @@ labelled_dataset = DeticDenseLabelledDataset(
     item_coordinates_path="results/object_coordinates",
 )
 
-torch.save(labelled_dataset, "./detic_labeled_dataset_lab0920.pt")
+torch.save(labelled_dataset, "./labeled_dataset.pt")

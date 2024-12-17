@@ -21,7 +21,7 @@ from model.grid_hash_model import GridCLIPModel
 
 from dataloaders import ClassificationExtractor
 
-# Set up the constants
+# Set up the constants for the training loop
 
 SAVE_DIRECTORY = "YOUR_PATH_TO_SAVE_MODEL"
 DATA_DIRECTORY = "./labeled_dataset.pt"

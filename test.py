@@ -102,7 +102,7 @@ class CustomDataset(Dataset):
         return len(self.xyz_data)
 
     def __getitem__(self, index):
-        # 返回xyz数据和对应的affordance值
+        # return a tuple of (xyz, affordance)
         xyz = self.xyz_data[index]
         affordance = self.affordance_values[index]
         return xyz, affordance

@@ -93,7 +93,7 @@ You can use your own device to collect data for custom scenes. During the data c
 
 you can find more infomation at: [Record3D](https://github.com/marek-simonik/record3d)
 
-Additionally, we provide the dataset used in our paper, which can be downloaded via [Google Drive](https://drive.google.com/file/d/1_3bCNzlL-WXtHrt86otewXANmHl_R88H/view?usp=drive_linkOnce) downloaded, you can run the **demo.ipynb** file to quickly test the performance of our model.
+Additionally, we provide the dataset used in our paper, which can be downloaded at [Google Drive](https://drive.google.com/file/d/1_3bCNzlL-WXtHrt86otewXANmHl_R88H/view?usp=drive_linkOnce), you can run the **demo.ipynb** file to quickly test the performance of our model.
 
 ## Checkpoints
 

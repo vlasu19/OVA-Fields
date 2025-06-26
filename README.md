@@ -19,7 +19,7 @@
 
   </p>
 
-  <h2 align="center">Submited to CVPR 2025</h2>
+  <h2 align="center">ICCV 2025</h2>
   <h3 align="center"><a href="">Paper</a> | <a href="">Video</a> | <a href="">Project Page</a></h3>
   <div align="center"></div>
 
@@ -65,7 +65,8 @@
 
 ## News :triangular_flag_on_post:
 
-- [2024/12/12] Code is released.
+- [6/26/2025] Our paper is accepted to ICCV 2025
+- [12/12/2024] Code is released.
 
 
 ## Installation

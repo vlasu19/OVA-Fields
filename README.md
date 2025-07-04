@@ -1,6 +1,6 @@
 <p align="center">
 
-  <h1 align="center">OVA-Fields: Open Vocabulary Affordance Fields for Scene Understanding</h1>
+  <h1 align="center">OVA-Fields: Weakly Supervised Open-Vocabulary Affordance Fields for Robot Operational Part Detection</h1>
   <p align="center">
     <a href="https://github.com/vlasu19"><strong>Heng Su</strong></a>
     ·
@@ -9,6 +9,8 @@
     <a href="https://scholar.google.com/citations?user=5GVcOTEAAAAJ&hl=en"><strong>Nieqing Cao</strong></a>
     ·
     <a href="https://yding25.github.io/"><strong>Ding Yan</strong></a>
+    ·
+    <a href="https://yding25.github.io/"><strong>Xianlei Long</strong></a>
     <br>
     <a href="https://www.researchgate.net/profile/Fuqiang-Gu"><strong>Fuqiang Gu</strong></a>
     ·

@@ -11,9 +11,9 @@
     <a href="https://yding25.github.io/"><strong>Ding Yan</strong></a>
     ·
     <a href="https://github.com/ssspeg"><strong>Beichen Shao</strong></a>
-    ·
-    <a href="https://yding25.github.io/"><strong>Xianlei Long</strong></a>
     <br>
+    <a href="https://yding25.github.io/"><strong>Xianlei Long</strong></a>
+    ·
     <a href="https://www.researchgate.net/profile/Fuqiang-Gu"><strong>Fuqiang Gu</strong></a>
     ·
     <a href="http://www.cs.cqu.edu.cn/info/1274/7704.htm"><strong>Chao Chen*</strong></a>
@@ -29,7 +29,7 @@
 
 <p align="center">
   <a href="">
-    <img src="https://github.com/vlasu19/OVA-Fields/blob/master/resources/introduction2.png" width="100%">
+    <img src="https://github.com/vlasu19/OVA-Fields/blob/master/resources/Introduction2.png" width="100%">
   </a>
 </p>
 <p align="center">

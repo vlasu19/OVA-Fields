@@ -107,14 +107,14 @@ Our pretrained model can be downloaded from [Google Drive](https://drive.google.
 
 After setting up the required environment and obtaining the necessary data, you can train our model by following these steps:
 
-1. Modify the `DATA_PATH` in **build_model.py** to point to your data directory.
+1. Modify the `DATA_PATH` in **build_data.py** to point to your data directory.
 
 2. Modify the `SAVE_DIRECTORY` in **train.py** to specify the path where you want to save the model.
 
 3. Run the following command to build the model:
 
    ```bash
-   python build_model.py
+   python build_data.py
    ```
 
 4. Run the following command to start training the model:

@@ -22,7 +22,7 @@
   </p>
 
   <h2 align="center">ICCV 2025</h2>
-  <h3 align="center"><a href="">Paper</a> | <a href="">Video</a> | <a href="">Project Page</a></h3>
+  <h3 align="center"><a href="https://openaccess.thecvf.com/content/ICCV2025/html/Su_OVA-Fields_Weakly_Supervised_Open-Vocabulary_Affordance_Fields_for_Robot_Operational_Part_ICCV_2025_paper.html">Paper</a> | <a href="">Video</a> | <a href="">Project Page</a></h3>
   <div align="center"></div>
 
 </p>

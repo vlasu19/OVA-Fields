@@ -134,5 +134,5 @@ We would like to extend our gratitude to [CLIP-Fields](https://github.com/notmah
 If you find our code or paper useful, please cite
 
 ```bibtex
-
+Su, H., Xie, M., Cao, N., Ding, Y., Shao, B., Long, X., ... & Chen, C. (2025). OVA-Fields: Weakly Supervised Open-Vocabulary Affordance Fields for Robot Operational Part Detection. In Proceedings of the IEEE/CVF International Conference on Computer Vision (pp. 6385-6395).
 ```
